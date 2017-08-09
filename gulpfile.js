@@ -2,35 +2,18 @@
  * Created by Administrator on 2017-07-03.
  */
 
-// º¯¼ö¼±¾ð = require('¸ðµâÀÌ¸§');
+// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ = require('ï¿½ï¿½ï¿½ï¿½Ì¸ï¿½');
 var gulp = require('gulp');
 var livereload = require('gulp-livereload');
 var include = require('gulp-include');
 var sass = require('gulp-sass');
 var watch = require('gulp-watch');
 var sourcemaps = require('gulp-sourcemaps');
+var concat = require('gulp-concat');
 
-/*
+// pipe()ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö´ï¿½ ï¿½Ô¼ï¿½
 
-gulp.task( taskÀÌ¸§, ÇÔ¼ö/ÀÍ¸íÇÔ¼ö );
-
- */
-
-gulp.task('hello1', function () {
-  return console.log('Hello World1!');
-});
-
-gulp.task('hello2', function () {
-  return console.log('Hello World2!');
-});
-
-gulp.task('hello3', function () {
-  return console.log('Hello World3!');
-});
-
-// pipe()´Â ¸ðµâÀÇ ±â´ÉÀ» ½ÇÇàÇØÁÖ´Â ÇÔ¼ö
-
-// »õ·Î °íÄ§
+// ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½Ä§
 gulp.task('livereload', function(){
   gulp.src(['html/*', 'css/*', 'js/*', '*'])
       .pipe( livereload() );
@@ -41,9 +24,11 @@ gulp.task('watch', function() {
   gulp.watch('*', ['livereload']);
   gulp.watch('html_src/**', ['include', 'livereload']);
   gulp.watch('css_src/**', ['sass', 'livereload']);
+  gulp.watch('js_src/**', ['jsconcat', 'livereload']);
+
 });
 
-// header, footer, °øÅë¿µ¿ª ºÐ¸®
+// header, footer, ï¿½ï¿½ï¿½ë¿µï¿½ï¿½ ï¿½Ð¸ï¿½
 gulp.task('include', function(){
   gulp.src("html_src/*.html")
       .pipe(include())
@@ -51,7 +36,7 @@ gulp.task('include', function(){
       .pipe(gulp.dest("html/"));
 });
 
-// sass ½ÇÇà
+// sass ï¿½ï¿½ï¿½ï¿½
 gulp.task('sass', function(){
   return gulp.src('css_src/*.scss')
       .pipe(sourcemaps.init())
@@ -60,5 +45,50 @@ gulp.task('sass', function(){
       .pipe(gulp.dest('css/'));
 });
 
-gulp.task('default', ['livereload', 'include', 'sass', 'watch']);
+// concat ï¿½ï¿½ï¿½ï¿½ - ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½Ï³ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Ï·ï¿½ ï¿½ï¿½Ä¡ï¿½ï¿½ ï¿½ï¿½ï¿½
+
+gulp.task('tabmenu', function() {
+  return gulp.src('js_src/tab_menu/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(concat('tab_menu.js'))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest('js/'));
+});
+
+gulp.task('gnbmenu', function() {
+  return gulp.src('js_src/gnb_menu/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(concat('gnb_menu.js'))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest('js/'));
+});
+
+gulp.task('timingfunction', function() {
+  return gulp.src('js_src/timing_function/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(concat('timing_function.js'))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest('js/'));
+});
+
+gulp.task('imagesliding', function() {
+  return gulp.src('js_src/image_sliding/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(concat('image_sliding.js'))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest('js/'));
+});
+
+gulp.task('accmenu', function() {
+  return gulp.src('js_src/acc_menu/*.js')
+      .pipe(sourcemaps.init())
+      .pipe(concat('acc_menu.js'))
+      .pipe(sourcemaps.write())
+      .pipe(gulp.dest('js/'));
+});
+
+
+gulp.task('jsconcat', ['tabmenu', 'gnbmenu', 'timingfunction', 'imagesliding', 'accmenu']);
+
+gulp.task('default', ['livereload', 'include', 'sass', 'jsconcat', 'watch']);
 
